@@ -1,2 +1,8 @@
 .env
-__pycache__/\n*.pyc
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+instance/
+*.sqlite3
+*.log

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rapport journalier</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f4f7fa;
+      margin: 0;
+      padding: 30px;
+      color: #2c3e50;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 26px;
+      color: #1a3e72;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .header img {
+      height: 70px;
+    }
+
+    form {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 25px;
+      box-shadow: 0 2px 10px rgba(26, 62, 114, 0.2);
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+      color: #1a3e72;
+    }
+
+    textarea,
+    input[type="text"],
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #aac8e7;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+      color: #1a3e72;
+    }
+
+    textarea {
+      height: 120px;
+    }
+
+    .input-short {
+      height: 38px;
+    }
+
+    .rubrique-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .zone-texte {
+      flex: 1;
+      min-width: 60%;
+    }
+
+    .zone-photo {
+      width: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .zone-photo .photo-box {
+      width: 100%;
+      height: 120px;
+      background-color: #f0f4f8;
+      border: 2px dashed #aac8e7;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      color: #7a8fa6;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .photo-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .button-group {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 8px 14px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease-in-out;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(26, 62, 114, 0.3);
+    }
+
+    .btn-corriger {
+      background-color: #1a3e72;
+    }
+
+    .btn-corriger:hover {
+      background-color: #144a8a;
+    }
+
+    .btn-ameliorer {
+      background-color: #3a6fb0;
+    }
+
+    .btn-selection {
+      background-color: #5499c7;
+    }
+
+    .btn-soumettre {
+      background-color: #2a4d7a;
+    }
+
+    .btn-supprimer {
+      background-color: #b03a3a;
+    }
+
+    .btn-ajouter-photo {
+      background-color: #4a6f9e;
+    }
+
+    .btn-supprimer-photo {
+      background-color: #8c3030;
+    }
+
+    hr {
+      margin: 40px 0;
+      border: none;
+      border-top: 1px solid #aac8e7;
+    }
+
+    .submit-global {
+      text-align: center;
+    }
+
+    .submit-global button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #1a3e72;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(26, 62, 114, 0.4);
+      transition: background 0.3s ease-in-out;
+    }
+
+    .submit-global button:hover {
+      background-color: #144a8a;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div><img src="/static/logo_entreprise.png" alt="Logo entreprise" /></div>
+    <h1>Rapport journalier</h1>
+    <div><img src="/static/logo_client.png" alt="Logo client" /></div>
+  </div>
+
+  <form>
+
+    <div class="form-group">
+      <label for="entite">Entité :</label>
+      <input type="text" name="entite" id="entite" class="input-short">
+    </div>
+
+    <div class="form-group">
+      <label for="service">Service :</label>
+      <input type="text" name="service" id="service" class="input-short">
+    </div>
+
+    <div class="form-group">
+      <label for="collaborateur">Nom & Prénom :</label>
+      <input type="text" name="collaborateur" id="collaborateur" class="input-short">
+    </div>
+
+    <div class="form-group">
+      <label for="date">Date :</label>
+      <input type="date" name="date" id="date" required class="input-short">
+    </div>
+
+    <hr />
+
+    <div id="rubriques-container"></div>
+
+    <hr />
+
+    <div class="submit-global">
+      <button type="submit">
+        Générer le fichier Excel
+      </button>
+    </div>
+
+  </form>
+
+  <script>
+    const rubriques = [
+      'Sensibilisation',
+      'Campagne HSE',
+      'Inspections',
+      'Formations',
+      'SOR',
+      'Détection / Actions',
+      'Incidents',
+      'Nombre d’anomalies observées',
+      'Nombre d’actions de correction',
+      'Travaux encadrés (EE)',
+      'Nombre de supports / accompagnement',
+      'Gestion des documents (élaboration, mise à jour, etc.)',
+      'CER / Audit',
+      'Induction',
+      'Autres'
+    ];
+
+    const container = document.getElementById('rubriques-container');
+
+    rubriques.forEach((rubrique, index) => {
+      const id = `rubrique_${index}`;
+      const html = `
+        <div class="form-group">
+          <label>${rubrique} :</label>
+          <div class="rubrique-line">
+
+            <div class="zone-texte">
+              <textarea name="${id}" id="${id}"></textarea>
+              <div class="button-group">
+                <button type="button" class="btn-corriger" onclick="corrigerTexte('${id}')">Corriger</button>
+                <button type="button" class="btn-supprimer" onclick="clearRubrique('${id}')">Supprimer</button>
+              </div>
+            </div>
+
+            <div class="zone-photo">
+              <div class="photo-box" id="photo_box_${id}">Zone photo</div>
+              <div class="photo-buttons">
+                <button type="button" class="btn-ajouter-photo" onclick="alert('Ajouter une photo')">Ajouter une photo</button>
+                <button type="button" class="btn-supprimer-photo" onclick="clearPhoto('${id}')">Supprimer la photo</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      `;
+      container.insertAdjacentHTML('beforeend', html);
+    });
+
+    function clearRubrique(textId) {
+      document.getElementById(textId).value = '';
+    }
+
+    function clearPhoto(id) {
+      const box = document.getElementById(`photo_box_${id}`);
+      if (box) {
+        box.innerText = "Zone photo";
+      }
+    }
+
+    async function corrigerTexte(id) {
+      const textarea = document.getElementById(id);
+      const texte = textarea.value;
+
+      if (!texte.trim()) {
+        alert("Le champ est vide !");
+        return;
+      }
+
+      textarea.disabled = true;
+      const original = textarea.value;
+      textarea.value = "Correction en cours...";
+
+      try {
+        const response = await fetch('/api/corriger', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ texte: texte })
+        });
+
+        const data = await response.json();
+
+        if (data.texte_corrige) {
+          textarea.value = data.texte_corrige;
+        } else {
+          throw new Error(data.error || "Erreur de réponse.");
+        }
+
+      } catch (error) {
+        console.error('Erreur de correction :', error);
+        textarea.value = original;
+        alert("Erreur lors de la correction.");
+      } finally {
+        textarea.disabled = false;
+      }
+    }
+  </script>
+
+</body>
+</html>
